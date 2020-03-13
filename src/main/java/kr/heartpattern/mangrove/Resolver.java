@@ -4,11 +4,8 @@ import kr.heartpattern.mangrove.logger.JULLoggerFactory;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
-import org.eclipse.aether.graph.DefaultDependencyNode;
-import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.impl.DefaultServiceLocator;
 import org.eclipse.aether.repository.LocalRepository;
@@ -22,10 +19,11 @@ import org.eclipse.aether.spi.log.LoggerFactory;
 import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.PrintStream;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.LinkedTransferQueue;
 
 public class Resolver {
@@ -63,6 +61,7 @@ public class Resolver {
 
         DependencyRequest dependencyRequest = new DependencyRequest();
         dependencyRequest.setCollectRequest(collectRequest);
+        dependencyRequest.setFilter(new BukkitFilter());
 
         DependencyResult dependencyResult = system.resolveDependencies(session, dependencyRequest);
 
